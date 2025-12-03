@@ -1,0 +1,92 @@
+@*
+    =============================================================================
+    Main Layout Template
+    =============================================================================
+    
+    Provides consistent structure across all pages with:
+    - Security-focused navigation
+    - Responsive design
+    - Custom deep teal & coral color scheme
+    =============================================================================
+*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SecureAuth</title>
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Background Pattern -->
+    <div class="bg-pattern"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-brand" href="/">
+                <span class="brand-icon">🔐</span>
+                <span class="brand-text">SecureAuth</span>
+            </a>
+            
+            <div class="nav-links">
+                @if (Context.Session.GetInt32("UserId") != null)
+                {
+                    <span class="nav-user">
+                        <span class="user-icon">👤</span>
+                        @Context.Session.GetString("Username")
+                    </span>
+                    <a asp-controller="Home" asp-action="Dashboard" class="nav-link">Dashboard</a>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="nav-form">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="nav-link nav-logout">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="nav-link">Login</a>
+                    <a asp-controller="Account" asp-action="Register" class="nav-link nav-register">Register</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Success/Error Messages -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                <span class="alert-icon">✓</span>
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-error">
+                <span class="alert-icon">✕</span>
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>SecureAuth System &copy; @DateTime.Now.Year</p>
+            <p class="footer-note">Built with security in mind 🛡️</p>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

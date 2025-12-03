@@ -1,0 +1,85 @@
+@*
+    =============================================================================
+    Home Page - Landing Page
+    =============================================================================
+    
+    Welcome page for visitors showcasing the security features of the system.
+    =============================================================================
+*@
+
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="hero">
+    <h1 class="hero-title">Secure Authentication System</h1>
+    <p class="hero-subtitle">
+        Experience enterprise-grade security with modern authentication practices. 
+        Protect your accounts with password hashing, two-factor authentication, and more.
+    </p>
+    <div class="hero-buttons">
+        <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">
+            Get Started
+        </a>
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline btn-lg">
+            Sign In
+        </a>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3 class="feature-title">BCrypt Hashing</h3>
+        <p class="feature-desc">
+            Passwords are secured using BCrypt with configurable work factor, 
+            ensuring protection against brute-force attacks.
+        </p>
+    </div>
+    
+    <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3 class="feature-title">Two-Factor Auth</h3>
+        <p class="feature-desc">
+            Add an extra layer of security with TOTP-based MFA, compatible with 
+            Google Authenticator and other apps.
+        </p>
+    </div>
+    
+    <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">SQL Injection Protection</h3>
+        <p class="feature-desc">
+            Entity Framework parameterized queries prevent SQL injection attacks, 
+            keeping your data safe.
+        </p>
+    </div>
+    
+    <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3 class="feature-title">XSS Prevention</h3>
+        <p class="feature-desc">
+            Input validation and output encoding protect against cross-site 
+            scripting vulnerabilities.
+        </p>
+    </div>
+    
+    <div class="feature-card">
+        <div class="feature-icon">🚫</div>
+        <h3 class="feature-title">CSRF Protection</h3>
+        <p class="feature-desc">
+            Anti-forgery tokens prevent cross-site request forgery attacks on 
+            all form submissions.
+        </p>
+    </div>
+    
+    <div class="feature-card">
+        <div class="feature-icon">⏱️</div>
+        <h3 class="feature-title">Account Lockout</h3>
+        <p class="feature-desc">
+            Automatic account lockout after failed attempts protects against 
+            credential stuffing attacks.
+        </p>
+    </div>
+</div>
+

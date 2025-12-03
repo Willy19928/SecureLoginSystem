@@ -1,0 +1,58 @@
+@*
+    =============================================================================
+    MFA Verification Page
+    =============================================================================
+    
+    Second step of login for users with MFA enabled.
+    Prompts for TOTP code from authenticator app.
+    =============================================================================
+*@
+
+@model MfaVerifyViewModel
+@{
+    ViewData["Title"] = "Two-Factor Authentication";
+}
+
+<div class="auth-container">
+    <div class="card auth-card">
+        <div class="card-header">
+            <div class="card-icon">🔐</div>
+            <h1 class="card-title">Verification Required</h1>
+            <p class="card-subtitle">Enter the code from your authenticator app</p>
+        </div>
+        
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+        
+        <form asp-action="Verify" method="post">
+            @Html.AntiForgeryToken()
+            
+            <div class="form-group">
+                <label asp-for="Code" class="form-label">Authentication Code</label>
+                <input asp-for="Code" 
+                       class="form-input" 
+                       placeholder="000000"
+                       maxlength="6"
+                       pattern="[0-9]{6}"
+                       autocomplete="one-time-code"
+                       style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5em; font-family: 'JetBrains Mono', monospace;"
+                       autofocus />
+                <span asp-validation-for="Code" class="form-error"></span>
+                <p class="form-hint">Enter the 6-digit code from your authenticator app</p>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+                Verify
+            </button>
+        </form>
+        
+        <!-- Back to Login -->
+        <div class="auth-footer">
+            <p class="auth-footer-text">
+                Having trouble? 
+                <a asp-controller="Account" asp-action="Login" class="auth-footer-link">Try again</a>
+            </p>
+        </div>
+    </div>
+</div>
+

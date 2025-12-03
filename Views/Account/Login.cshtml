@@ -1,0 +1,74 @@
+@*
+    =============================================================================
+    Login Page
+    =============================================================================
+    
+    User authentication form with CSRF protection.
+    Displays validation errors and supports MFA flow.
+    =============================================================================
+*@
+
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="auth-container">
+    <div class="card auth-card">
+        <div class="card-header">
+            <div class="card-icon">🔑</div>
+            <h1 class="card-title">Welcome Back</h1>
+            <p class="card-subtitle">Sign in to your account</p>
+        </div>
+        
+        <!-- Validation Summary for General Errors -->
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+        
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            
+            <!-- Username Field -->
+            <div class="form-group">
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" 
+                       class="form-input" 
+                       placeholder="Enter your username"
+                       autocomplete="username"
+                       autofocus />
+                <span asp-validation-for="Username" class="form-error"></span>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="form-group">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" 
+                       class="form-input" 
+                       placeholder="Enter your password"
+                       autocomplete="current-password" />
+                <span asp-validation-for="Password" class="form-error"></span>
+            </div>
+            
+            <!-- Remember Me Checkbox -->
+            <div class="form-group">
+                <label class="form-checkbox">
+                    <input asp-for="RememberMe" />
+                    <span class="form-checkbox-label">Remember me on this device</span>
+                </label>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+                Sign In
+            </button>
+        </form>
+        
+        <!-- Register Link -->
+        <div class="auth-footer">
+            <p class="auth-footer-text">
+                Don't have an account? 
+                <a asp-action="Register" class="auth-footer-link">Create one</a>
+            </p>
+        </div>
+    </div>
+</div>
+

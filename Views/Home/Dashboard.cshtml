@@ -1,0 +1,108 @@
+@*
+    =============================================================================
+    Dashboard Page - Protected User Area
+    =============================================================================
+    
+    Displays user information and security status.
+    Only accessible to authenticated users.
+    =============================================================================
+*@
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1 class="dashboard-welcome">Welcome, @ViewBag.Username! 👋</h1>
+        <p class="dashboard-email">@ViewBag.Email</p>
+    </div>
+    
+    <div class="dashboard-grid">
+        <!-- Account Info Card -->
+        <div class="dashboard-card">
+            <h3 class="dashboard-card-title">
+                <span class="dashboard-card-icon">📊</span>
+                Account Information
+            </h3>
+            <div class="dashboard-card-content">
+                <p><strong>Created:</strong> @ViewBag.AccountCreated</p>
+                <p><strong>Last Login:</strong> @ViewBag.LastLogin</p>
+            </div>
+        </div>
+        
+        <!-- Security Status Card -->
+        <div class="dashboard-card">
+            <h3 class="dashboard-card-title">
+                <span class="dashboard-card-icon">🔐</span>
+                Security Status
+            </h3>
+            <div class="dashboard-card-content">
+                <div class="mfa-status">
+                    <span>Two-Factor Auth:</span>
+                    @if (ViewBag.IsMfaEnabled)
+                    {
+                        <span class="mfa-badge mfa-enabled">
+                            ✓ Enabled
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="mfa-badge mfa-disabled">
+                            ⚠ Disabled
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions Card -->
+        <div class="dashboard-card">
+            <h3 class="dashboard-card-title">
+                <span class="dashboard-card-icon">⚡</span>
+                Quick Actions
+            </h3>
+            <div class="dashboard-actions">
+                @if (!ViewBag.IsMfaEnabled)
+                {
+                    <a asp-controller="Mfa" asp-action="SetupMfa" class="btn btn-primary btn-sm">
+                        Enable 2FA
+                    </a>
+                }
+                else
+                {
+                    <form asp-controller="Mfa" asp-action="Disable" method="post" style="display: inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" 
+                                onclick="return confirm('Are you sure you want to disable two-factor authentication?');">
+                            Disable 2FA
+                        </button>
+                    </form>
+                }
+                <form asp-controller="Account" asp-action="Logout" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline btn-sm">
+                        Sign Out
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Security Tips Card -->
+        <div class="dashboard-card">
+            <h3 class="dashboard-card-title">
+                <span class="dashboard-card-icon">💡</span>
+                Security Tips
+            </h3>
+            <div class="dashboard-card-content">
+                <ul style="margin: 0; padding-left: 1.25rem; color: var(--color-text-light);">
+                    <li>Use a unique password for each account</li>
+                    <li>Enable two-factor authentication</li>
+                    <li>Never share your authentication codes</li>
+                    <li>Log out when using shared devices</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

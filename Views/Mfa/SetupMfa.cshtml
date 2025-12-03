@@ -1,0 +1,78 @@
+@*
+    =============================================================================
+    MFA Setup Page
+    =============================================================================
+    
+    Guides users through enabling two-factor authentication:
+    - Displays QR code for authenticator app
+    - Provides manual entry key
+    - Verifies setup with code entry
+    =============================================================================
+*@
+
+@model MfaSetupViewModel
+@{
+    ViewData["Title"] = "Setup Two-Factor Authentication";
+}
+
+<div class="auth-container">
+    <div class="card mfa-container">
+        <div class="card-header">
+            <div class="card-icon">📱</div>
+            <h1 class="card-title">Setup 2FA</h1>
+            <p class="card-subtitle">Secure your account with two-factor authentication</p>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="mfa-instructions">
+            <p class="mfa-instructions-title">How to set up:</p>
+            <ol>
+                <li>Install an authenticator app (Google Authenticator, Microsoft Authenticator, etc.)</li>
+                <li>Scan the QR code below or enter the key manually</li>
+                <li>Enter the 6-digit code from your app to verify</li>
+            </ol>
+        </div>
+        
+        <!-- QR Code -->
+        <div class="mfa-qr">
+            <img src="@Model.QrCodeImage" alt="QR Code for authenticator app" />
+        </div>
+        
+        <!-- Manual Entry Key -->
+        <div class="mfa-manual">
+            <p class="mfa-manual-label">Can't scan? Enter this key manually:</p>
+            <p class="mfa-manual-key">@Model.ManualEntryKey</p>
+        </div>
+        
+        <!-- Verification Form -->
+        <form asp-action="SetupMfa" method="post">
+            @Html.AntiForgeryToken()
+            
+            <div class="form-group">
+                <label asp-for="VerificationCode" class="form-label">Enter verification code</label>
+                <input asp-for="VerificationCode" 
+                       class="form-input" 
+                       placeholder="000000"
+                       maxlength="6"
+                       pattern="[0-9]{6}"
+                       autocomplete="one-time-code"
+                       style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5em; font-family: 'JetBrains Mono', monospace;"
+                       autofocus />
+                <span asp-validation-for="VerificationCode" class="form-error"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+                Verify & Enable 2FA
+            </button>
+        </form>
+        
+        <!-- Cancel Option -->
+        <div class="auth-footer">
+            <p class="auth-footer-text">
+                Changed your mind? 
+                <a asp-controller="Account" asp-action="Login" class="auth-footer-link">Skip for now</a>
+            </p>
+        </div>
+    </div>
+</div>
+

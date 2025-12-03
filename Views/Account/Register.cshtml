@@ -1,0 +1,130 @@
+@*
+    =============================================================================
+    Registration Page
+    =============================================================================
+    
+    New user registration form with:
+    - Input validation
+    - Password strength requirements
+    - Optional MFA setup
+    - CSRF protection
+    =============================================================================
+*@
+
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="auth-container">
+    <div class="card auth-card">
+        <div class="card-header">
+            <div class="card-icon">✨</div>
+            <h1 class="card-title">Create Account</h1>
+            <p class="card-subtitle">Join us with a secure account</p>
+        </div>
+        
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+        
+        <form asp-action="Register" method="post" id="registerForm">
+            @Html.AntiForgeryToken()
+            
+            <!-- Username Field -->
+            <div class="form-group">
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" 
+                       class="form-input" 
+                       placeholder="Choose a username"
+                       autocomplete="username"
+                       autofocus />
+                <span asp-validation-for="Username" class="form-error"></span>
+                <p class="form-hint">3-50 characters, letters, numbers, and underscores only</p>
+            </div>
+            
+            <!-- Email Field -->
+            <div class="form-group">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" 
+                       class="form-input" 
+                       placeholder="your@email.com"
+                       autocomplete="email" />
+                <span asp-validation-for="Email" class="form-error"></span>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="form-group">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" 
+                       class="form-input" 
+                       placeholder="Create a strong password"
+                       autocomplete="new-password"
+                       id="passwordInput" />
+                <div class="password-strength">
+                    <div class="password-strength-bar" id="strengthBar"></div>
+                </div>
+                <span asp-validation-for="Password" class="form-error"></span>
+                <p class="form-hint">Min 8 chars with uppercase, lowercase, number, and special character</p>
+            </div>
+            
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" 
+                       class="form-input" 
+                       placeholder="Confirm your password"
+                       autocomplete="new-password" />
+                <span asp-validation-for="ConfirmPassword" class="form-error"></span>
+            </div>
+            
+            <!-- MFA Option -->
+            <div class="form-group">
+                <label class="form-checkbox">
+                    <input asp-for="EnableMfa" />
+                    <span class="form-checkbox-label">Enable Two-Factor Authentication (recommended)</span>
+                </label>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-accent btn-full btn-lg">
+                Create Account
+            </button>
+        </form>
+        
+        <!-- Login Link -->
+        <div class="auth-footer">
+            <p class="auth-footer-text">
+                Already have an account? 
+                <a asp-action="Login" class="auth-footer-link">Sign in</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Password strength indicator
+        document.getElementById('passwordInput').addEventListener('input', function(e) {
+            const password = e.target.value;
+            const bar = document.getElementById('strengthBar');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            // Using \x24 for $ to avoid Razor parsing issues
+            if (/\d/.test(password) && /[@@\x24!%*?&]/.test(password)) strength++;
+            
+            bar.className = 'password-strength-bar';
+            if (strength === 0) {
+                bar.style.width = '0';
+            } else if (strength === 1) {
+                bar.classList.add('strength-weak');
+            } else if (strength === 2) {
+                bar.classList.add('strength-medium');
+            } else {
+                bar.classList.add('strength-strong');
+            }
+        });
+    </script>
+}
+

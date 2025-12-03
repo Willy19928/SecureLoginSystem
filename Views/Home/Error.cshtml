@@ -1,0 +1,33 @@
+@*
+    =============================================================================
+    Error Page
+    =============================================================================
+    
+    Generic error page for unhandled exceptions.
+    Maintains consistent styling with the rest of the application.
+    =============================================================================
+*@
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="auth-container">
+    <div class="card auth-card">
+        <div class="card-header">
+            <div class="card-icon" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);">⚠️</div>
+            <h1 class="card-title" style="color: #EF4444;">Oops!</h1>
+            <p class="card-subtitle">Something went wrong</p>
+        </div>
+        
+        <div style="text-align: center; color: var(--color-text-light); margin-bottom: 2rem;">
+            <p>We encountered an unexpected error while processing your request.</p>
+            <p>Please try again or contact support if the problem persists.</p>
+        </div>
+        
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-full">
+            Return to Home
+        </a>
+    </div>
+</div>
+
